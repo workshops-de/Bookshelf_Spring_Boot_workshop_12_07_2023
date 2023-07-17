@@ -1,0 +1,11 @@
+server:
+  port: 8090
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+bookshelf:
+  name: My productive Bookshelf

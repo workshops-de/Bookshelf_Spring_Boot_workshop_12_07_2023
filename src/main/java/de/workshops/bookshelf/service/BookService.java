@@ -46,4 +46,8 @@ public class BookService {
     private boolean hasAuthor(Book book, String author) {
         return book.getAuthor().contains(author);
     }
+
+    public void saveBook(Book book) {
+        repository.saveBook(book);
+    }
 }

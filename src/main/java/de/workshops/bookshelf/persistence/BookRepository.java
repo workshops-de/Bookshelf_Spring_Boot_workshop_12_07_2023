@@ -34,4 +34,8 @@ public class BookRepository {
     public List<Book> getAllBooks() {
         return this.books;
     }
+
+    public void saveBook(Book book) {
+        this.books.add(book);
+    }
 }

@@ -1,0 +1,33 @@
+application:
+  title: '@project.name@'
+  version: '@project.version@'
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          servlet:
+            mvc:
+              method:
+                annotation:
+                  RequestMappingHandlerMapping: trace
+#server:
+#  servlet:
+#    context-path: /bookshelf
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+bookshelf:
+  name: My Bookshelf
+  isbn-lookup:
+    url: http://isbn.example.org/lookup
+    api-key: secret
