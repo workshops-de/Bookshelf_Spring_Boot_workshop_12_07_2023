@@ -31,3 +31,28 @@ bookshelf:
   isbn-lookup:
     url: http://isbn.example.org/lookup
     api-key: secret
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/test
+    username: test
+    password: test
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true # By default, DDL statements will only be generated for embedded databases.
+    # By default, Spring Boot will try to populate the database from data.sql on startup,
+    # i.e. before JPA has the opportunity to generate DDL statements from classes annotated with @Entity.
+    defer-datasource-initialization: true
+    hibernate:
+      # Re-generating the DDL upon each application start to account for data model changes.
+      ddl-auto: create-drop
+    open-in-view: false
+  sql:
+    init:
+      # The default value is 'embedded', which only works for in-memory databases.
+      # Since we're using a 'non-embedded' database here, we now need to set this to 'always'.
+      mode: always
+  h2:
+    console:
+      enabled: true

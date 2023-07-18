@@ -1,41 +1,18 @@
 package de.workshops.bookshelf.persistence;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.workshops.bookshelf.domain.Book;
-import jakarta.annotation.PostConstruct;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public class BookRepository {
+public interface BookRepository extends ListCrudRepository<Book, Long> {
 
-    private final ObjectMapper mapper;
+    Optional<Book> findByIsbn(String isbn);
 
-    private final ResourceLoader resourceLoader;
+    Optional<Book> findByAuthor(String author);
 
-    private List<Book> books;
-
-    public BookRepository(ObjectMapper mapper, ResourceLoader resourceLoader) {
-        this.mapper = mapper;
-        this.resourceLoader = resourceLoader;
-    }
-
-    @PostConstruct
-    public void init() throws Exception {
-        Resource resource = resourceLoader.getResource("classpath:books_data.json");
-        this.books = mapper.readValue(resource.getInputStream(), new TypeReference<>() {
-        });
-    }
-
-    public List<Book> getAllBooks() {
-        return this.books;
-    }
-
-    public void saveBook(Book book) {
-        this.books.add(book);
-    }
+    List<Book> findByIsbnAndAuthor(String isbn, String author);
 }
