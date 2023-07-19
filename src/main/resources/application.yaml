@@ -40,13 +40,8 @@ spring:
     password: test
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true # By default, DDL statements will only be generated for embedded databases.
-    # By default, Spring Boot will try to populate the database from data.sql on startup,
-    # i.e. before JPA has the opportunity to generate DDL statements from classes annotated with @Entity.
-    defer-datasource-initialization: true
     hibernate:
-      # Re-generating the DDL upon each application start to account for data model changes.
-      ddl-auto: create-drop
+      ddl-auto: validate
     open-in-view: false
   sql:
     init:

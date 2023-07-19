@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -20,9 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureTestDatabase
+@Sql(statements = "INSERT INTO bookshelf_user (username, password, role) VALUES ('unit_test', '$2a$10$bq/gcMPfAbFs5BzJojX20O5DRPVDLzssCGLPs.Vloj5xDoV0RrLYy', 'ROLE_ADMIN')", executionPhase = BEFORE_TEST_METHOD)
+@Sql(statements = "DELETE FROM bookshelf_user WHERE username = 'unit_test'", executionPhase = AFTER_TEST_METHOD)
 class BookRestControllerIntegrationTest {
 
     @LocalServerPort
@@ -48,13 +53,17 @@ class BookRestControllerIntegrationTest {
     void setUpHttp() {
         RestAssured.port = port;
 
-        rest = new RestTemplateBuilder().rootUri("http://localhost:" + port).build();
+        rest = new RestTemplateBuilder()
+                .basicAuthentication("unit_test", "password")
+                .rootUri("http://localhost:" + port)
+                .build();
     }
 
     @Test
     void getAllBooks_should_return_json_array() {
         given().
             log().all().
+            auth().basic("unit_test", "password").
         when().
             get("/book").
         then().
