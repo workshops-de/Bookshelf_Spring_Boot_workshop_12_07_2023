@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                                 "/v3/api-docs/**",
                                 "/webjars/swagger-ui/**"
                         ).permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
